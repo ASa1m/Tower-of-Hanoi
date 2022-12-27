@@ -1,50 +1,84 @@
-TITLE x86 Assembler (Assembler.asm)
-;
-; Assemble x86 instructions to machine code
-;
-;
-
 Include irvine32.inc
 .data
 ;variable declarations go here
-stack1 DWORD -1,6,4,2,0,0,0,0,0,0,0,0,0
+
+stacksize DWORD 12
+stack1 DWORD -1,0,0,0,0,0,0,0,0,0,0,0,0
 stack2 DWORD -1,0,0,0,0,0,0,0,0,0,0,0,0
 stack3 DWORD -1,0,0,0,0,0,0,0,0,0,0,0,0
 
+towerofhanoi byte '  ______                                 ____   __  __                  _ ',0ah,0dh
+byte ' /_  __/___ _      _____  _____   ____  / __/  / / / /___ _____  ____  (_)',0ah,0dh
+byte '  / / / __ \ | /| / / _ \/ ___/  / __ \/ /_   / /_/ / __ `/ __ \/ __ \/ / ',0ah,0dh
+byte ' / / / /_/ / |/ |/ /  __/ /     / /_/ / __/  / __  / /_/ / / / / /_/ / /  ',0ah,0dh
+byte '/_/  \____/|__/|__/\___/_/      \____/_/    /_/ /_/\__,_/_/ /_/\____/_/   ',0ah,0dh,0ah,0dh
+byte 'INSTRUCTIONS: ',0ah,0dh,0ah,0dh
+byte '         a: move top tile from stack 1 to stack 2',0ah,0dh
+byte '         s: move top tile from stack 2 to stack 3',0ah,0dh
+byte '         d: move top tile from stack 1 to stack 3',0ah,0dh
+byte '         q: move top tile from stack 2 to stack 1',0ah,0dh
+byte '         w: move top tile from stack 3 to stack 2',0ah,0dh
+byte '         e: move top tile from stack 3 to stack 1',0ah,0dh,0ah,0dh
+byte 'Objective of the game is to: ',0ah,0dh
+byte '         Move all tiles from stack 1 to stack 3',0ah,0dh,0ah,0dh
+byte 'Enter size of stack (1-10): ',0
+
+youwin byte ' ',0ah,0dh,0ah,0dh,0ah,0dh,0ah,0dh
+byte '       Y88b   d88P                                   d8b          ',0ah,0dh
+byte '        Y88b d88P                                    Y8P          ',0ah,0dh
+byte '         Y88o88P                                                  ',0ah,0dh
+byte '          Y888P  .d88b.  888  888      888  888  888 888 88888b.  ',0ah,0dh
+byte '           888  d88""88b 888  888      888  888  888 888 888 "88b ',0ah,0dh
+byte '           888  888  888 888  888      888  888  888 888 888  888 ',0ah,0dh
+byte '           888  Y88..88P Y88b 888      Y88b 888 d88P 888 888  888 ',0ah,0dh
+byte '           888   "Y88P"   "Y88888       "Y8888888P"  888 888  888 ',0
 .code
 
+initializeGame proc
+mov esi, offset stack1
+shl eax, 1
+mov stacksize, eax
+startinit:
+add esi, 4
+mov [esi], eax
+cmp eax, 0
+je endinit
+sub eax, 2
+jmp startinit
+endinit:
+ret
+
+initializeGame endp
+
 checkWin proc
-mov ebx, 6
+mov ebx, stacksize
 mov ebp, offset stack3
-add ebp, 4
+add ebp,4
 checkstart:
 mov eax, [ebp]
 cmp eax, ebx
-jne checkend
+jne checkfails
 sub ebx, 2
 add ebp, 4
-jmp checkstart
-checkend:
 cmp ebx, 0
 je win
+jmp checkstart
+checkend:
+checkfails:
 ret
 
 win:
-mov eax, 10
-call writechar
+call clrscr
+mov edx, offset youwin
+call writestring
 Exit
 ret
 
 checkWin endp
 
 printstack proc
-;######################
 mov bl, dl
-; dl = bl-([esi]/2)
-; mov eax, [esi]
-; shr eax, 1
-; sub bl, al
-; add dl, bl
+
 add esi, 4
 mov ecx, [esi]
 cmp ecx, 0
@@ -52,19 +86,26 @@ je empty
 
 
 start:
+mov eax, [esi]
+shr eax,1
+mov bl,al
+sub dl,al
+call Gotoxy
+
 mov ecx, [esi]
+mov  eax,ecx
+call SetTextColor
 displaytile:
 mov eax, 219
 call writechar
 loop displaytile
 
-mov eax, [esi]
-add esi,4
-;###################
-dec dh
-inc dl
-;###################
+add dl, bl
 call Gotoxy
+
+
+add esi,4
+dec dh
 
 mov eax, [esi]
 cmp eax, 0
@@ -129,7 +170,11 @@ ret
 toTop endp
 
 Main Proc
-
+mov edx,offset towerofhanoi
+call writestring
+call readint
+call initializeGame
+call clrscr
 startingpoint:
 
 call updatestack
