@@ -3,24 +3,21 @@ TITLE x86 Assembler (Assembler.asm)
 ; Assemble x86 instructions to machine code
 ;
 ;
-;
-;
-;
-
 
 Include irvine32.inc
 .data
 ;variable declarations go here
-stack1 DWORD 18,16,14,12,10,8,6,4,2,0
-stack2 DWORD 18,16,14,12,10,8,6,0,0,0
-stack3 DWORD 18,0,0,0,0,0,0,0,0,0,0,0
+stack1 DWORD -1,6,4,2,0,0,0,0,0,0,0,0,0
+stack2 DWORD -1,0,0,0,0,0,0,0,0,0,0,0,0
+stack3 DWORD -1,0,0,0,0,0,0,0,0,0,0,0,0
 
 .code
 
 checkWin proc
-mov ebx, 18
-checkstart:
+mov ebx, 6
 mov ebp, offset stack3
+add ebp, 4
+checkstart:
 mov eax, [ebp]
 cmp eax, ebx
 jne checkend
@@ -48,6 +45,11 @@ mov bl, dl
 ; shr eax, 1
 ; sub bl, al
 ; add dl, bl
+add esi, 4
+mov ecx, [esi]
+cmp ecx, 0
+je empty
+
 
 start:
 mov ecx, [esi]
@@ -67,6 +69,8 @@ call Gotoxy
 mov eax, [esi]
 cmp eax, 0
 jne start
+
+empty:
 
 ret
 
@@ -180,8 +184,16 @@ swapping:
 call toTop
 mov eax, [esi]
 mov ebx, [edi]
+cmp eax, -1
+je startingpoint
+cmp ebx, -1
+je skipcomparison
+
 cmp eax, ebx
 jnl startingpoint
+
+skipcomparison:
+
 add edi, 4
 mov [edi], eax
 mov eax, 0
