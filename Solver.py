@@ -1,7 +1,6 @@
+#Used to automate the solution
 import pyautogui
 import time
-
-
 
 delay=0
 
@@ -39,5 +38,5 @@ def tower_of_hanoi(disks, source, auxiliary, target):
   
 disks = int(input('Enter the number of disks: '))  
 # We are referring source as A, auxiliary as B, and target as C  
-time.sleep(5)
+time.sleep(5) #Time delay to open the window of game
 tower_of_hanoi(disks, 'A', 'B', 'C')  # Calling the function  
