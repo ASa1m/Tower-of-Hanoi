@@ -9,7 +9,7 @@ stack3 DWORD -1,0,0,0,0,0,0,0,0,0,0,0,0
 
 towerofhanoi byte '  ______                                 ____   __  __                  _ ',0ah,0dh
 byte ' /_  __/___ _      _____  _____   ____  / __/  / / / /___ _____  ____  (_)',0ah,0dh
-byte '  / / / __ \ | /| / / _ \/ ___/  / __ \/ /_   / /_/ / __ `/ __ \/ __ \/ / ',0ah,0dh
+byte '  / / / __ \ | /| / / _ \/ ___/  / __ \/ /_   / /_/ / __ `/ __ \/ __ \/ / ',0ah,0dh     
 byte ' / / / /_/ / |/ |/ /  __/ /     / /_/ / __/  / __  / /_/ / / / / /_/ / /  ',0ah,0dh
 byte '/_/  \____/|__/|__/\___/_/      \____/_/    /_/ /_/\__,_/_/ /_/\____/_/   ',0ah,0dh,0ah,0dh
 byte 'INSTRUCTIONS: ',0ah,0dh,0ah,0dh
@@ -94,7 +94,7 @@ call Gotoxy
 
 mov ecx, [esi]
 mov  eax,ecx
-call SetTextColor
+call SetTextColor   
 displaytile:
 mov eax, 219
 call writechar
