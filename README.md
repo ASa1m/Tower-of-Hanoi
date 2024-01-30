@@ -1,6 +1,8 @@
 # Tower of Hanoi Game in Assembly Language
 This project is a game implementation of the classic Tower of Hanoi puzzle using Assembly language. The objective of the game is to move all the tiles from stack 1 to stack 3 using the available stacks, following specific rules.
 
+![Tower of Hanoi](https://github.com/ASa1m/Tower-of-Hanoi/blob/main/tower.png)
+
 ## Getting Started
 The game can be downloaded and played on an Assembly language simulator. The source code is provided in the main.asm file. It includes the irvine32.inc file and uses it to write console output.
 
